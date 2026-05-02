@@ -16,12 +16,13 @@ export function stripExports(): Plugin {
 					}
 
 					const resolvedPath = path.resolve(outPath)
+
 					let code = fs.readFileSync(resolvedPath, 'utf8')
 
-					// Remove export blocks: export { foo, bar };
+					// Remove export blocks: export { foo, bar }
 					code = code.replace(/\nexport\s+\{[^}]+\};/g, '')
 
-					// Remove export keywords from declarations
+					// Remove export keywords from declarations: export function foo() {}
 					code = code.replace(/^export\s+/m, '')
 					code = code.replace(/\nexport\s+/g, '\n')
 

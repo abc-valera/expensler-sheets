@@ -10,9 +10,8 @@ export interface Account {
 	processGetTransactionsResponse: (response: HTTPResponse) => Map<string, Transaction[]>
 
 	// TODO: track the state of the account somehow
-	// e.g. if the account was removed and is no more valid then the user should know about it
+	// e.g. if the account is not available anymore (if the api key was revoked for example)
+	// then the user should know about it
 	// This should be done on creation and on further requests too.
 	// isValid: boolean
-
-	// TODO: add different currencies support
 }

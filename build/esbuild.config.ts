@@ -21,12 +21,13 @@ export const tsConfig: BuildOptions = {
 	bundle: true,
 	target: 'es2016',
 	platform: 'node',
-	resolveExtensions: ['.ts', '.json'],
+	resolveExtensions: ['.ts', '.tsx', '.json'],
 	define: {
 		EXPENSLER_TAG_VERSION: JSON.stringify(process.env.EXPENSLER_TAG_VERSION ?? getBuildVersion()),
 		EXPENSLER_COMMIT_VERSION: JSON.stringify(getBuildVersion()),
 	},
 	plugins: [
+		solidPlugin({ solid: { generate: 'ssr' } }),
 		stripExports(),
 	],
 }
