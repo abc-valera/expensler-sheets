@@ -11,7 +11,8 @@ interface MccEntry {
 // MCC codes json list (merchant category code (MCC) is a four-digit number
 // used to classify a business by the types of goods or services it provides).
 //
-// The map was obtained from https://github.com/Oleksios/Merchant-Category-Codes
+// The map was obtained from https://github.com/Oleksios/Merchant-Category-Codes.
+// Some values were modified.
 export const mccMap: Record<string, MccEntry> = {
 	'1520': {
 		mcc: '1520',
@@ -6737,9 +6738,8 @@ export const mccMap: Record<string, MccEntry> = {
 			type: 'TS',
 			description: 'Transportation Services',
 		},
-		shortDescription: 'Passenger transportation',
-		fullDescription:
-			'Transportation-Suburban and Local Commuter Passenger, including Ferries',
+		shortDescription: 'Public Transport',
+		fullDescription: 'Transportation-Suburban and Local Commuter Passenger, including Ferries',
 	},
 	'4112': {
 		mcc: '4112',
@@ -6948,7 +6948,7 @@ export const mccMap: Record<string, MccEntry> = {
 			type: 'US',
 			description: 'Utility Services',
 		},
-		shortDescription: 'Mobile connection',
+		shortDescription: 'Connection',
 		fullDescription: 'Telecommunication Services',
 	},
 	'4815': {
@@ -7455,7 +7455,7 @@ export const mccMap: Record<string, MccEntry> = {
 			type: 'ROS',
 			description: 'Retail Outlet Services',
 		},
-		shortDescription: 'Food stores',
+		shortDescription: 'Grocery',
 		fullDescription:
 			'Miscellaneous Food Stores - Convenience Stores, Markets, Specialty Stores, and Vending Machines',
 	},
@@ -7811,7 +7811,7 @@ export const mccMap: Record<string, MccEntry> = {
 			type: 'MS',
 			description: 'Miscellaneous Stores',
 		},
-		shortDescription: 'Cafe. Restaurants',
+		shortDescription: 'Restaurants',
 		fullDescription: 'Eating Places and Restaurants ',
 	},
 	'5813': {
@@ -7830,7 +7830,7 @@ export const mccMap: Record<string, MccEntry> = {
 			type: 'MS',
 			description: 'Miscellaneous Stores',
 		},
-		shortDescription: 'Fast Food',
+		shortDescription: 'Restaurants',
 		fullDescription: 'Fast Food Restaurants',
 	},
 	'5815': {
@@ -8654,7 +8654,7 @@ export const mccMap: Record<string, MccEntry> = {
 			type: 'PS',
 			description: 'Personal services',
 		},
-		shortDescription: 'The beauty',
+		shortDescription: 'Beauty Services',
 		fullDescription: 'Barber and Beauty Shops',
 	},
 	'7251': {
