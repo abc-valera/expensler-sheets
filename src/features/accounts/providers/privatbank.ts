@@ -7,13 +7,14 @@ export const privatbankName = 'Privatbank'
 export class PrivatbankAccount implements Account {
 	public readonly name: string
 	public readonly bankName: string = privatbankName
-	public readonly addedAt: Date = new Date()
+	public readonly addedAt: Date
 
-	constructor(input: { name: string }) {
+	constructor(input: { name: string, addedAt: Date }) {
 		if (!input.name) {
 			throw new Error('Privatbank account name is missing')
 		}
 		this.name = input.name
+		this.addedAt = input.addedAt
 	}
 
 	public newGetTransactionsRequest(_from: Date, _to: Date): URLFetchRequest {

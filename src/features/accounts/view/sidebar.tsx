@@ -178,8 +178,7 @@ function AccountItem(props: {
 				<span class="account-bank">{props.account.bankName}</span>
 			</div>
 			<div class="account-meta">
-				Added
-				{props.account.addedAt.toString()}
+				{`Added ${new Date(props.account.addedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`}
 			</div>
 			<button
 				class="delete-btn"

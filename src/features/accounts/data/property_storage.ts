@@ -1,8 +1,8 @@
 import type { Account } from '../interface/account'
-import { SampleAccount, sampleName } from '../providers/sample'
 import { MonobankAccount, monobankName } from '../providers/monobank'
 import { PrivatbankAccount, privatbankName } from '../providers/privatbank'
 import { RaifeissenAccount, raifeissenBankName } from '../providers/raifeisen'
+import { SampleAccount, sampleName } from '../providers/sample'
 
 const PROPERTY_KEY = 'accounts'
 
@@ -20,15 +20,16 @@ export function loadAccounts(): Account[] {
 	try {
 		const parsed = JSON.parse(serialized)
 		return parsed.map((item: any) => {
+			const addedAt = item.addedAt ? new Date(item.addedAt) : new Date()
 			switch (item.bankName) {
 				case monobankName:
-					return new MonobankAccount({ name: item.name, accountId: item.accountId, apiKey: item.apiKey })
+					return new MonobankAccount({ name: item.name, accountId: item.accountId, apiKey: item.apiKey, addedAt })
 				case privatbankName:
-					return new PrivatbankAccount({ name: item.name })
+					return new PrivatbankAccount({ name: item.name, addedAt })
 				case raifeissenBankName:
-					return new RaifeissenAccount({ name: item.name })
+					return new RaifeissenAccount({ name: item.name, addedAt })
 				case sampleName:
-					return new SampleAccount({ name: item.name })
+					return new SampleAccount({ name: item.name, addedAt })
 				default:
 					throw new Error(`Unknown bank: ${item.bankName}`)
 			}

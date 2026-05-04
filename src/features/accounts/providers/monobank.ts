@@ -9,12 +9,12 @@ export const monobankName = 'Monobank'
 export class MonobankAccount implements Account {
 	public readonly name: string
 	public readonly bankName: string = monobankName
-	public readonly addedAt: Date = new Date()
+	public readonly addedAt: Date
 
 	public readonly accountId: string
 	public readonly apiKey: string
 
-	constructor(input: { name: string, accountId: string, apiKey: string }) {
+	constructor(input: { name: string, accountId: string, apiKey: string, addedAt: Date }) {
 		if (!input.name) {
 			throw new Error('Monobank account name is missing')
 		}
@@ -29,6 +29,7 @@ export class MonobankAccount implements Account {
 			throw new Error('Monobank account ID is missing')
 		}
 		this.accountId = input.accountId
+		this.addedAt = input.addedAt
 	}
 
 	public newGetTransactionsRequest(from: Date, to: Date): URLFetchRequest {
