@@ -1,4 +1,5 @@
 import type { Account } from '../interface/account'
+import { SampleAccount, sampleName } from '../providers/sample'
 import { MonobankAccount, monobankName } from '../providers/monobank'
 import { PrivatbankAccount, privatbankName } from '../providers/privatbank'
 import { RaifeissenAccount, raifeissenBankName } from '../providers/raifeisen'
@@ -26,6 +27,8 @@ export function loadAccounts(): Account[] {
 					return new PrivatbankAccount({ name: item.name })
 				case raifeissenBankName:
 					return new RaifeissenAccount({ name: item.name })
+				case sampleName:
+					return new SampleAccount({ name: item.name })
 				default:
 					throw new Error(`Unknown bank: ${item.bankName}`)
 			}

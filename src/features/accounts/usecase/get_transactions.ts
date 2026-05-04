@@ -4,23 +4,31 @@ import { loadAccounts } from '../data/property_storage'
 export function getTransactionsFromAllAccounts(from: Date, to: Date): Map<string, Transaction[]> {
 	const accounts = loadAccounts()
 
-	const requests = accounts.map(account => account.newGetTransactionsRequest(from, to))
-
-	const responses = UrlFetchApp.fetchAll(requests)
+	const directAccounts = accounts.filter(a => a.getTransactionsDirect !== undefined)
+	const httpAccounts = accounts.filter(a => a.getTransactionsDirect === undefined)
 
 	const allTransactions = new Map<string, Transaction[]>()
 
-	responses.forEach((response, index) => {
-		const accountTransactions = accounts[index].processGetTransactionsResponse(response)
-
-		accountTransactions.forEach((transactions, key) => {
+	function mergeIn(source: Map<string, Transaction[]>) {
+		source.forEach((transactions, key) => {
 			if (!allTransactions.has(key)) {
 				allTransactions.set(key, [])
 			}
-
 			allTransactions.set(key, allTransactions.get(key)!.concat(transactions))
 		})
-	})
+	}
+
+	for (const account of directAccounts) {
+		mergeIn(account.getTransactionsDirect!(from, to))
+	}
+
+	if (httpAccounts.length > 0) {
+		const requests = httpAccounts.map(account => account.newGetTransactionsRequest(from, to))
+		const responses = UrlFetchApp.fetchAll(requests)
+		responses.forEach((response, index) => {
+			mergeIn(httpAccounts[index].processGetTransactionsResponse(response))
+		})
+	}
 
 	// Sort transactions by time for each month (newest first)
 	allTransactions.forEach((transactions) => {

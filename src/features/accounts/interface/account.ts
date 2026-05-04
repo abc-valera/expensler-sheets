@@ -9,6 +9,9 @@ export interface Account {
 	newGetTransactionsRequest: (from: Date, to: Date) => URLFetchRequest
 	processGetTransactionsResponse: (response: HTTPResponse) => Map<string, Transaction[]>
 
+	// If defined, transactions are returned directly without making an HTTP request.
+	getTransactionsDirect?: (from: Date, to: Date) => Map<string, Transaction[]>
+
 	// TODO: track the state of the account somehow
 	// e.g. if the account is not available anymore (if the api key was revoked for example)
 	// then the user should know about it
