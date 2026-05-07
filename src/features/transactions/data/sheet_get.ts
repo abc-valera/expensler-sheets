@@ -1,4 +1,4 @@
-import { dateToSheetName } from '../../../shared/dateutil'
+import { dateToSheetName } from '../../../shared/sheets_naming'
 import { Transaction } from '../model/model'
 import { columnsNumber } from './sheet_dto'
 

@@ -1,7 +1,5 @@
 import type { Account } from '../interface/account'
 import { MonobankAccount, monobankName } from '../providers/monobank'
-import { PrivatbankAccount, privatbankName } from '../providers/privatbank'
-import { RaifeissenAccount, raifeissenBankName } from '../providers/raifeisen'
 import { SampleAccount, sampleName } from '../providers/sample'
 
 const PROPERTY_KEY = 'accounts'
@@ -23,10 +21,6 @@ export function loadAccounts(): Account[] {
 			switch (item.bankName) {
 				case monobankName:
 					return new MonobankAccount({ name: item.name, accountId: item.accountId, apiKey: item.apiKey, addedAt: new Date(item.addedAt), isValid: item.isValid })
-				case privatbankName:
-					return new PrivatbankAccount({ name: item.name, addedAt: new Date(item.addedAt), isValid: item.isValid })
-				case raifeissenBankName:
-					return new RaifeissenAccount({ name: item.name, addedAt: new Date(item.addedAt), isValid: item.isValid })
 				case sampleName:
 					return new SampleAccount({ name: item.name, addedAt: new Date(item.addedAt), isValid: item.isValid })
 				default:

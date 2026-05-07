@@ -43,6 +43,9 @@ export class Transaction {
 		}
 		this.category = input.category
 
+		if (!input.vendor) {
+			throw new Error('Transaction vendor is missing')
+		}
 		this.vendor = input.vendor
 
 		this.comment = input.comment

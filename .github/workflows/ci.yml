@@ -12,6 +12,9 @@ jobs:
     name: Lint & Build
     runs-on: ubuntu-latest
 
+    env:
+      EXPENSLER_SHEETS_SCRIPT_ID: ${{ secrets.EXPENSLER_SHEETS_SCRIPT_ID }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -24,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npm run lint
+        run: bash run.sh run::lint
 
       - name: Build
-        run: npm run build
+        run: bash run.sh run::build:release

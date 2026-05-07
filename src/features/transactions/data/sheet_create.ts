@@ -1,4 +1,4 @@
-import { sortSheetsAlphabetically } from '../../../shared/dateutil'
+import { sortSheetsAlphabetically } from '../../../shared/sheets_naming'
 import { colNames, columnsNumber, getColIndex, getColLetter, getEntireColLetter } from './sheet_dto'
 
 const colors = {

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "[pre-commit] Running lint:fix..."
+bash run.sh run::lint:fix
+echo "[pre-commit] Staging linter changes..."
+git add -u
+echo "[pre-commit] Done."

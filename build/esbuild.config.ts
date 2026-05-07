@@ -16,14 +16,14 @@ function getBuildVersion(): string {
 
 export const tsConfig: BuildOptions = {
 	entryPoints: ['src/cmd/main.ts'],
-	outfile: 'output/main.js',
+	outfile: 'output/dist/main.js',
 	format: 'esm',
 	bundle: true,
 	target: 'es2016',
 	platform: 'node',
 	resolveExtensions: ['.ts', '.tsx', '.json'],
 	define: {
-		EXPENSLER_TAG_VERSION: JSON.stringify(process.env.EXPENSLER_TAG_VERSION ?? getBuildVersion()),
+		EXPENSLER_VERSION: JSON.stringify(process.env.EXPENSLER_VERSION ?? getBuildVersion()),
 		EXPENSLER_COMMIT_VERSION: JSON.stringify(getBuildVersion()),
 	},
 	plugins: [
@@ -34,7 +34,7 @@ export const tsConfig: BuildOptions = {
 
 export const solidConfig: BuildOptions = {
 	entryPoints: ['src/**/*.html'],
-	outdir: 'output',
+	outdir: 'output/dist',
 	outbase: 'src',
 	bundle: true,
 	target: 'es2016',
@@ -44,8 +44,15 @@ export const solidConfig: BuildOptions = {
 	],
 }
 
-rmSync('output', { recursive: true, force: true })
+rmSync('output/dist', { recursive: true, force: true })
 await build(tsConfig)
 await build(solidConfig)
 
-fs.copyFileSync('src/appsscript.json', 'output/appsscript.json')
+fs.copyFileSync('src/appsscript.json', 'output/dist/appsscript.json')
+
+// Create a .clasp.json with the scriptId from env var
+const scriptId = process.env.EXPENSLER_SHEETS_SCRIPT_ID
+if (!scriptId) {
+	throw new Error('EXPENSLER_SHEETS_SCRIPT_ID env var is required')
+}
+fs.writeFileSync('output/.clasp.json', JSON.stringify({ scriptId, rootDir: './dist' }, null, '\t'))
