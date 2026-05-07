@@ -14,6 +14,10 @@ export class RaifeissenAccount implements Account {
 			throw new Error('Raifeissen account name is missing')
 		}
 		this.name = input.name
+
+		if (!input.addedAt) {
+			throw new Error('Raifeissen account addedAt is missing')
+		}
 		this.addedAt = input.addedAt
 	}
 

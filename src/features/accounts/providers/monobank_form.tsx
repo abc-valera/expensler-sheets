@@ -1,71 +1,187 @@
 import type { Account } from '../interface/account'
+import { createSignal, For, Show } from 'solid-js'
+import { monobankName } from './monobank'
 
-const monobankName = 'Monobank'
+// Step represents the stages of the form.
+type Step = 'api-key' | 'select-account'
 
 export function MonobankAccountAddForm(props: {
 	onSubmit: (account: Account) => void
 	onCancel: () => void
 	isProcessing: boolean
+	existingAccounts: { name: string, bankName: string }[]
 }) {
-	const handleSubmit = (e: Event) => {
-		e.preventDefault()
-		const formData = new FormData(e.target as HTMLFormElement)
+	const [step, setStep] = createSignal<Step>('api-key')
+	const [apiKey, setApiKey] = createSignal('')
+	const [isFetching, setIsFetching] = createSignal(false)
+	const [fetchError, setFetchError] = createSignal<string | null>(null)
+	const [availableAccounts, setAvailableAccounts] = createSignal<{ accountId: string, name: string }[]>([])
+	const [selectedName, setSelectedName] = createSignal<string | null>(null)
+
+	const existingMonobankNames = () =>
+		new Set(
+			props.existingAccounts
+				.filter(a => a.bankName === monobankName)
+				.map(a => a.name),
+		)
+
+	const handleFetchAccounts = async () => {
+		const key = apiKey().trim()
+		if (!key)
+			return
+
+		setIsFetching(true)
+		setFetchError(null)
+
+		try {
+			const response = await fetch('https://api.monobank.ua/personal/client-info', {
+				method: 'GET',
+				headers: { 'X-Token': key },
+			})
+
+			if (!response.ok) {
+				const text = await response.text()
+				throw new Error(`Monobank API error ${response.status}: ${text}`)
+			}
+
+			const data: MonobankClientInfo = await response.json()
+			const taken = existingMonobankNames()
+
+			const accounts = data.accounts
+				.map(a => ({ accountId: a.id, name: buildAccountName(a) }))
+				.filter(a => !taken.has(a.name))
+
+			setAvailableAccounts(accounts)
+			setStep('select-account')
+		}
+		catch (err: any) {
+			setFetchError(err?.message ?? 'Unknown error')
+		}
+		finally {
+			setIsFetching(false)
+		}
+	}
+
+	const handleConfirm = () => {
+		const name = selectedName()
+		if (!name)
+			return
+
+		const selected = availableAccounts().find(a => a.name === name)
+		if (!selected)
+			return
+
 		props.onSubmit({
-			// TODO: for now it's written like that and not imported from monobank.ts
-			// to avoid importing the whole mcc map into the sidebar's script.
-			// Should find a way to be able to both import the class and not import the mcc map.
-			name: formData.get('name') as string,
+			name,
 			bankName: monobankName,
 			addedAt: new Date().toISOString(),
-			accountId: formData.get('accountId') as string,
-			apiKey: formData.get('apiKey') as string,
+			accountId: selected.accountId,
+			apiKey: apiKey().trim(),
 		} as unknown as Account)
 	}
 
 	return (
-		<form onSubmit={handleSubmit}>
-			<div class="form-group">
-				<label for="name">Name:</label>
-				<input
-					type="text"
-					id="name"
-					name="name"
-					required
-					disabled={props.isProcessing}
-				/>
-			</div>
-			<div class="form-group">
-				<label for="accountId">Account ID:</label>
-				<input
-					type="text"
-					id="accountId"
-					name="accountId"
-					required
-					disabled={props.isProcessing}
-				/>
-			</div>
-			<div class="form-group">
-				<label for="apiKey">API Key:</label>
-				<input
-					type="text"
-					id="apiKey"
-					name="apiKey"
-					required
-					disabled={props.isProcessing}
-				/>
-			</div>
-			<div class="form-buttons">
-				<button type="submit" disabled={props.isProcessing}>
-					{props.isProcessing ? 'Saving...' : 'Save'}
-				</button>
-				<button
-					type="button"
-					onClick={props.onCancel}
-					disabled={props.isProcessing}
+		<Show
+			when={step() === 'select-account'}
+			fallback={(
+				<div>
+					<div class="form-group">
+						<label for="apiKey">API Key:</label>
+						<input
+							type="text"
+							id="apiKey"
+							name="apiKey"
+							required
+							disabled={isFetching() || props.isProcessing}
+							value={apiKey()}
+							onInput={e => setApiKey(e.currentTarget.value)}
+						/>
+					</div>
+
+					<Show when={fetchError()}>
+						<div class="form-error">{fetchError()}</div>
+					</Show>
+
+					<div class="form-buttons">
+						<button
+							type="button"
+							class="submit-btn"
+							disabled={isFetching() || props.isProcessing || !apiKey().trim()}
+							onClick={handleFetchAccounts}
+						>
+							{isFetching() ? 'Loading...' : 'Next'}
+						</button>
+						<button
+							type="button"
+							onClick={props.onCancel}
+							disabled={isFetching() || props.isProcessing}
+						>
+							Cancel
+						</button>
+					</div>
+				</div>
+			)}
+		>
+			<div>
+				<Show
+					when={availableAccounts().length > 0}
+					fallback={<div class="empty-state">No new accounts available.</div>}
 				>
-					Cancel
-				</button>
+					<div class={`account-picker${availableAccounts().length > 5 ? ' account-picker--scroll' : ''}`}>
+						<For each={availableAccounts()}>
+							{item => (
+								<button
+									type="button"
+									class={`picker-item${selectedName() === item.name ? ' selected' : ''}`}
+									onClick={() => setSelectedName(item.name)}
+									disabled={props.isProcessing}
+								>
+									{item.name}
+								</button>
+							)}
+						</For>
+					</div>
+				</Show>
+
+				<div class="form-buttons">
+					<button
+						type="button"
+						class="submit-btn"
+						disabled={!selectedName() || props.isProcessing}
+						onClick={handleConfirm}
+					>
+						{props.isProcessing ? 'Saving...' : 'Add'}
+					</button>
+					<button
+						type="button"
+						onClick={() => {
+							setStep('api-key')
+							setSelectedName(null)
+						}}
+						disabled={props.isProcessing}
+					>
+						Back
+					</button>
+				</div>
 			</div>
-		</form>
+		</Show>
 	)
+}
+
+function buildAccountName(account: MonobankApiAccount): string {
+	const pan = account.maskedPan?.[0]
+	const suffix = pan ? pan.slice(-4) : account.iban.slice(-4)
+	return `${account.type} ${suffix}`
+}
+
+interface MonobankClientInfo {
+	accounts: MonobankApiAccount[]
+}
+
+interface MonobankApiAccount {
+	id: string
+	type: string
+	currencyCode: number
+	maskedPan: string[]
+	iban: string
 }

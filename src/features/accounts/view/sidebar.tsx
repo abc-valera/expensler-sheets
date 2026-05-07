@@ -2,10 +2,10 @@ import type { Account } from '../interface/account'
 import { createSignal, For, onMount, Show } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { render } from 'solid-js/web'
-import { SampleAccountAddForm } from '../providers/sample_form'
 import { MonobankAccountAddForm } from '../providers/monobank_form'
 import { PrivatbankAccountAddForm } from '../providers/privatbank_form'
 import { RaifeisenAccountAddForm } from '../providers/raifeisen_form'
+import { SampleAccountAddForm } from '../providers/sample_form'
 
 function AccountsSidebarApp() {
 	const [accounts, setAccounts] = createStore<Account[]>([])
@@ -131,6 +131,7 @@ function AccountsSidebarApp() {
 										onSubmit={handleFormSubmit}
 										onCancel={handleFormCancel}
 										isProcessing={isFormProcessing()}
+										existingAccounts={accounts}
 									/>
 								</Show>
 

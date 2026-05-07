@@ -14,6 +14,10 @@ export class PrivatbankAccount implements Account {
 			throw new Error('Privatbank account name is missing')
 		}
 		this.name = input.name
+
+		if (!input.addedAt) {
+			throw new Error('Privatbank account addedAt is missing')
+		}
 		this.addedAt = input.addedAt
 	}
 

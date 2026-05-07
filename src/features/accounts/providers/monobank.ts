@@ -29,6 +29,10 @@ export class MonobankAccount implements Account {
 			throw new Error('Monobank account ID is missing')
 		}
 		this.accountId = input.accountId
+
+		if (!input.addedAt) {
+			throw new Error('Monobank account addedAt is missing')
+		}
 		this.addedAt = input.addedAt
 	}
 

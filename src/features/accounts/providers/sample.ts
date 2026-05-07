@@ -31,6 +31,10 @@ export class SampleAccount implements Account {
 			throw new Error('Sample account name is missing')
 		}
 		this.name = input.name
+
+		if (!input.addedAt) {
+			throw new Error('Sample account addedAt is missing')
+		}
 		this.addedAt = input.addedAt
 	}
 
