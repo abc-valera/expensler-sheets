@@ -14,6 +14,7 @@ export function RaifeisenAccountAddForm(props: {
 			name: formData.get('name') as string,
 			bankName: raifeissenBankName,
 			addedAt: new Date().toISOString(),
+			isValid: true,
 		} as unknown as Account)
 	}
 

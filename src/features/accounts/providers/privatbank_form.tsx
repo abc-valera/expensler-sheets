@@ -14,6 +14,7 @@ export function PrivatbankAccountAddForm(props: {
 			name: formData.get('name') as string,
 			bankName: privatbankName,
 			addedAt: new Date().toISOString(),
+			isValid: true,
 		} as unknown as Account)
 	}
 

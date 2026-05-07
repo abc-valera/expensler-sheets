@@ -20,16 +20,15 @@ export function loadAccounts(): Account[] {
 	try {
 		const parsed = JSON.parse(serialized)
 		return parsed.map((item: any) => {
-			const addedAt = item.addedAt ? new Date(item.addedAt) : new Date()
 			switch (item.bankName) {
 				case monobankName:
-					return new MonobankAccount({ name: item.name, accountId: item.accountId, apiKey: item.apiKey, addedAt })
+					return new MonobankAccount({ name: item.name, accountId: item.accountId, apiKey: item.apiKey, addedAt: new Date(item.addedAt), isValid: item.isValid })
 				case privatbankName:
-					return new PrivatbankAccount({ name: item.name, addedAt })
+					return new PrivatbankAccount({ name: item.name, addedAt: new Date(item.addedAt), isValid: item.isValid })
 				case raifeissenBankName:
-					return new RaifeissenAccount({ name: item.name, addedAt })
+					return new RaifeissenAccount({ name: item.name, addedAt: new Date(item.addedAt), isValid: item.isValid })
 				case sampleName:
-					return new SampleAccount({ name: item.name, addedAt })
+					return new SampleAccount({ name: item.name, addedAt: new Date(item.addedAt), isValid: item.isValid })
 				default:
 					throw new Error(`Unknown bank: ${item.bankName}`)
 			}
@@ -71,10 +70,11 @@ export function deleteAccount(accountName: string): void {
 	saveAccounts(filtered)
 }
 
-export function readAccountsArray(): { name: string, bankName: string, addedAt: string }[] {
+export function readAccountsArray(): { name: string, bankName: string, addedAt: string, isValid: boolean }[] {
 	return loadAccounts().map(a => ({
 		name: a.name,
 		bankName: a.bankName,
 		addedAt: a.addedAt.toISOString(),
+		isValid: a.isValid,
 	}))
 }

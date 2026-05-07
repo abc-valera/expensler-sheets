@@ -10,11 +10,12 @@ export class MonobankAccount implements Account {
 	public readonly name: string
 	public readonly bankName: string = monobankName
 	public readonly addedAt: Date
+	public isValid: boolean
 
 	public readonly accountId: string
 	public readonly apiKey: string
 
-	constructor(input: { name: string, accountId: string, apiKey: string, addedAt: Date }) {
+	constructor(input: { name: string, accountId: string, apiKey: string, addedAt: Date, isValid: boolean }) {
 		if (!input.name) {
 			throw new Error('Monobank account name is missing')
 		}
@@ -34,6 +35,11 @@ export class MonobankAccount implements Account {
 			throw new Error('Monobank account addedAt is missing')
 		}
 		this.addedAt = input.addedAt
+
+		if (input.isValid === undefined) {
+			throw new Error('Monobank account isValid is missing')
+		}
+		this.isValid = input.isValid
 	}
 
 	public newGetTransactionsRequest(from: Date, to: Date): URLFetchRequest {

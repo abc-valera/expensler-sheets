@@ -25,8 +25,9 @@ export class SampleAccount implements Account {
 	public readonly name: string
 	public readonly bankName: string = sampleName
 	public readonly addedAt: Date
+	public isValid: boolean
 
-	constructor(input: { name: string, addedAt: Date }) {
+	constructor(input: { name: string, addedAt: Date, isValid: boolean }) {
 		if (!input.name) {
 			throw new Error('Sample account name is missing')
 		}
@@ -36,6 +37,11 @@ export class SampleAccount implements Account {
 			throw new Error('Sample account addedAt is missing')
 		}
 		this.addedAt = input.addedAt
+
+		if (input.isValid === undefined) {
+			throw new Error('Sample account isValid is missing')
+		}
+		this.isValid = input.isValid
 	}
 
 	public newGetTransactionsRequest(_from: Date, _to: Date): URLFetchRequest {

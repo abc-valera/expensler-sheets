@@ -176,7 +176,12 @@ function AccountItem(props: {
 		<div class="account-item">
 			<div class="account-header">
 				<span class="account-name">{props.account.name}</span>
-				<span class="account-bank">{props.account.bankName}</span>
+				<div class="account-badges">
+					<Show when={!props.account.isValid}>
+						<span class="account-invalid">Invalid</span>
+					</Show>
+					<span class="account-bank">{props.account.bankName}</span>
+				</div>
 			</div>
 			<div class="account-meta">
 				{`Added ${new Date(props.account.addedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`}

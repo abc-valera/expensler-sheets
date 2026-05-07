@@ -14,6 +14,7 @@ export function SampleAccountAddForm(props: {
 			name: formData.get('name') as string,
 			bankName: sampleName,
 			addedAt: new Date().toISOString(),
+			isValid: true,
 		} as unknown as Account)
 	}
 

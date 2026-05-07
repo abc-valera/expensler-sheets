@@ -77,6 +77,7 @@ export function MonobankAccountAddForm(props: {
 			addedAt: new Date().toISOString(),
 			accountId: selected.accountId,
 			apiKey: apiKey().trim(),
+			isValid: true,
 		} as unknown as Account)
 	}
 

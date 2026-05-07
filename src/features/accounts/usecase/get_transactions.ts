@@ -1,5 +1,5 @@
 import type { Transaction } from '../../transactions/model/model'
-import { loadAccounts } from '../data/property_storage'
+import { loadAccounts, updateAccount } from '../data/property_storage'
 
 export function getTransactionsFromAllAccounts(from: Date, to: Date): Map<string, Transaction[]> {
 	const accounts = loadAccounts()
@@ -26,7 +26,18 @@ export function getTransactionsFromAllAccounts(from: Date, to: Date): Map<string
 		const requests = httpAccounts.map(account => account.newGetTransactionsRequest(from, to))
 		const responses = UrlFetchApp.fetchAll(requests)
 		responses.forEach((response, index) => {
-			mergeIn(httpAccounts[index].processGetTransactionsResponse(response))
+			const account = httpAccounts[index]
+			try {
+				mergeIn(account.processGetTransactionsResponse(response))
+			}
+			catch (error) {
+				const message = error instanceof Error ? error.message : String(error)
+				if (message.includes('"errorDescription":"Unknown \'X-Token\'"') || message.includes('"errorDescription":"invalid account"')) {
+					account.isValid = false
+					updateAccount(account)
+				}
+				throw error
+			}
 		})
 	}
 
