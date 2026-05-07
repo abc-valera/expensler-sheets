@@ -1,6 +1,6 @@
 import type { HTTPResponse, URLFetchRequest } from '../../../shared/fetchutil'
 import type { Account } from '../interface/account'
-import { dateToSheetName } from '../../../shared/dateutil'
+import { dateToSheetName } from '../../sheets/naming'
 import { mccMap } from '../../transactions/model/mcc_map_en'
 import { Transaction } from '../../transactions/model/model'
 

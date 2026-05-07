@@ -1,7 +1,7 @@
 import type { Transaction } from '../../transactions/model/model'
 import type { CategoryAggregation } from '../model/category_aggregation'
 import type { VendorAggregation } from '../model/vendor_aggregation'
-import { sheetNamePattern, sheetNameToDate } from '../../../shared/dateutil'
+import { sheetNamePattern, sheetNameToDate } from '../../sheets/naming'
 import { getTransactionsForMonth } from '../../transactions/data/sheet_get'
 import { addCategoryPieChart, addVendorPieChart, createStatsSheet } from './sheet_create'
 import { categoryColumnsNumber, getCategoryColIndex, getTotalColIndex, getVendorColIndex, vendorColumnsNumber } from './sheet_dto'

@@ -1,4 +1,6 @@
-// Use HTML dialogs instead of built-in alerts to avoid the stuck "Working..." spinner in Sheets.
+// This file defines a custom message dialog.
+// It's used instead of built-in alerts to avoid the stuck "Working..." spinner in Sheets.
+
 import { messageDialogHtml } from './html'
 
 export function showHtmlDialog({ message, type }: { message: string, type: 'info' | 'error' }) {

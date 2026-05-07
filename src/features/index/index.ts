@@ -1,18 +1,20 @@
-const DASHBOARD_SHEET_NAME = 'Dashboard'
+import { getBuildVersion } from '../../shared/build_version'
+
+const INDEX_SHEET_NAME = 'Index'
 
 export function createOrUpdateDashboardSheet(): void {
 	const ss = SpreadsheetApp.getActiveSpreadsheet()
 
-	let sheet = ss.getSheetByName(DASHBOARD_SHEET_NAME)
+	let sheet = ss.getSheetByName(INDEX_SHEET_NAME)
 	if (!sheet) {
-		sheet = ss.insertSheet(DASHBOARD_SHEET_NAME, 0)
-		Logger.log('Created new Dashboard sheet')
+		sheet = ss.insertSheet(INDEX_SHEET_NAME, 0)
+		Logger.log('Created new Index sheet')
 	}
 
 	sheet.clearContents()
 	sheet.clearFormats()
 
-	const version = getAppVersion()
+	const version = getBuildVersion()
 
 	// --- Layout ---
 	// Row 1: App title banner
@@ -78,16 +80,12 @@ export function createOrUpdateDashboardSheet(): void {
 	sheet.getRange('B4:C4').setBackground('#e0f7ec')
 
 	// Protect the sheet (read-only warning)
-	const protection = sheet.protect().setDescription('Dashboard - auto-generated')
+	const protection = sheet.protect().setDescription('Index - auto-generated')
 	protection.setWarningOnly(true)
 
-	// Move Dashboard to first position
+	// Move Index to first position
 	ss.setActiveSheet(sheet)
 	ss.moveActiveSheet(1)
 
-	Logger.log('Dashboard sheet updated successfully')
-}
-
-function getAppVersion(): string {
-	return typeof EXPENSLER_TAG_VERSION !== 'undefined' ? EXPENSLER_TAG_VERSION : EXPENSLER_COMMIT_VERSION
+	Logger.log('Index sheet updated successfully')
 }

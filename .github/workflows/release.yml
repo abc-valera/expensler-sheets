@@ -4,11 +4,18 @@ on:
   push:
     tags:
       - 'v*.*.*'
+      - 'v*.*'
 
 jobs:
   release:
     name: Build & Deploy
     runs-on: ubuntu-latest
+
+    env:
+      EXPENSLER_TAG_VERSION: ${{ github.ref_name }}
+      EXPENSLER_SHEETS_SCRIPT_ID: ${{ secrets.EXPENSLER_SHEETS_SCRIPT_ID }}
+      clasp_config_auth: .clasprc.json
+      clasp_config_project: ./output/.clasp.json
 
     steps:
       - uses: actions/checkout@v4
@@ -22,15 +29,10 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npm run lint
-
-      - name: Build
-        run: npm run build
-        env:
-          EXPENSLER_TAG_VERSION: ${{ github.ref_name }}
+        run: bash run.sh run::lint
 
       - name: Authenticate clasp
-        run: echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
+        run: echo '${{ secrets.CLASPRC_JSON }}' > .clasprc.json
 
       - name: Deploy to Google Apps Script
-        run: npx clasp push --force
+        run: bash run.sh run::deploy

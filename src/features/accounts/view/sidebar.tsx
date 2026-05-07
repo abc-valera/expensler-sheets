@@ -3,8 +3,6 @@ import { createSignal, For, onMount, Show } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { render } from 'solid-js/web'
 import { MonobankAccountAddForm } from '../providers/monobank_form'
-import { PrivatbankAccountAddForm } from '../providers/privatbank_form'
-import { RaifeisenAccountAddForm } from '../providers/raifeisen_form'
 import { SampleAccountAddForm } from '../providers/sample_form'
 
 function AccountsSidebarApp() {
@@ -14,7 +12,7 @@ function AccountsSidebarApp() {
 
 	const [isFormProcessing, setIsFormProcessing] = createSignal(false)
 	const [formProcessingError, setFormProcessingError] = createSignal<Error | null>(null)
-	const [form, setForm] = createSignal<'monobank' | 'privatbank' | 'raifeisen' | 'sample' | null>(null)
+	const [form, setForm] = createSignal<'monobank' | 'sample' | null>(null)
 
 	const loadAccounts = () => {
 		setAreAccountsLoading(true)
@@ -96,12 +94,6 @@ function AccountsSidebarApp() {
 								<button class="add-btn" onClick={() => setForm('monobank')}>
 									+ Monobank
 								</button>
-								<button class="add-btn" onClick={() => setForm('privatbank')}>
-									+ Privatbank
-								</button>
-								<button class="add-btn" onClick={() => setForm('raifeisen')}>
-									+ Raifeisen
-								</button>
 								<button class="add-btn" onClick={() => setForm('sample')}>
 									+ Sample
 								</button>
@@ -114,7 +106,7 @@ function AccountsSidebarApp() {
 									<span class="add-form-title">
 										Add
 										{' '}
-										{form() === 'monobank' ? 'Monobank' : form() === 'privatbank' ? 'Privatbank' : form() === 'raifeisen' ? 'Raifeisen' : 'Sample'}
+										{form() === 'monobank' ? 'Monobank' : 'Sample'}
 										{' '}
 										account
 									</span>
@@ -132,22 +124,6 @@ function AccountsSidebarApp() {
 										onCancel={handleFormCancel}
 										isProcessing={isFormProcessing()}
 										existingAccounts={accounts}
-									/>
-								</Show>
-
-								<Show when={form() === 'privatbank'}>
-									<PrivatbankAccountAddForm
-										onSubmit={handleFormSubmit}
-										onCancel={handleFormCancel}
-										isProcessing={isFormProcessing()}
-									/>
-								</Show>
-
-								<Show when={form() === 'raifeisen'}>
-									<RaifeisenAccountAddForm
-										onSubmit={handleFormSubmit}
-										onCancel={handleFormCancel}
-										isProcessing={isFormProcessing()}
 									/>
 								</Show>
 

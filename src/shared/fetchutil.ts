@@ -1,3 +1,6 @@
+// This file defines types for the URLFetchApp service in Google Apps Script.
+// Somehow they are not included in the @types/google-apps-script package by default.
+
 export interface URLFetchRequest {
 	url: string
 

@@ -1,6 +1,5 @@
-*.env
-!example.env
-
 node_modules/
 
 output/
+
+secrets/

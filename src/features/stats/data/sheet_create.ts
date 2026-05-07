@@ -1,4 +1,4 @@
-import { sortSheetsAlphabetically } from '../../../shared/dateutil'
+import { sortSheetsAlphabetically } from '../../sheets/naming'
 import {
 	getCategoryColIndex,
 	getTotalColIndex,

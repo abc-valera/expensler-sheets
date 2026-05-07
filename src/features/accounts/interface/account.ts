@@ -12,8 +12,4 @@ export interface Account {
 
 	newGetTransactionsRequest: (from: Date, to: Date) => URLFetchRequest
 	processGetTransactionsResponse: (response: HTTPResponse) => Map<string, Transaction[]>
-
-	// TODO: remove this
-	// If defined, transactions are returned directly without making an HTTP request.
-	getTransactionsDirect?: (from: Date, to: Date) => Map<string, Transaction[]>
 }

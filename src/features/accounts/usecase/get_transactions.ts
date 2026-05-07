@@ -4,9 +4,6 @@ import { loadAccounts, updateAccount } from '../data/property_storage'
 export function getTransactionsFromAllAccounts(from: Date, to: Date): Map<string, Transaction[]> {
 	const accounts = loadAccounts()
 
-	const directAccounts = accounts.filter(a => a.getTransactionsDirect !== undefined)
-	const httpAccounts = accounts.filter(a => a.getTransactionsDirect === undefined)
-
 	const allTransactions = new Map<string, Transaction[]>()
 
 	function mergeIn(source: Map<string, Transaction[]>) {
@@ -18,15 +15,11 @@ export function getTransactionsFromAllAccounts(from: Date, to: Date): Map<string
 		})
 	}
 
-	for (const account of directAccounts) {
-		mergeIn(account.getTransactionsDirect!(from, to))
-	}
-
-	if (httpAccounts.length > 0) {
-		const requests = httpAccounts.map(account => account.newGetTransactionsRequest(from, to))
+	if (accounts.length > 0) {
+		const requests = accounts.map(account => account.newGetTransactionsRequest(from, to))
 		const responses = UrlFetchApp.fetchAll(requests)
 		responses.forEach((response, index) => {
-			const account = httpAccounts[index]
+			const account = accounts[index]
 			try {
 				mergeIn(account.processGetTransactionsResponse(response))
 			}

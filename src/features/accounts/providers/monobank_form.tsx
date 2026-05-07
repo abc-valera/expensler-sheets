@@ -71,6 +71,7 @@ export function MonobankAccountAddForm(props: {
 		if (!selected)
 			return
 
+		// Note: MonobankAccount's constructor is not imported here to avoid bundling the MCC map into the sidebar.
 		props.onSubmit({
 			name,
 			bankName: monobankName,
