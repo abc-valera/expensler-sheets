@@ -22,6 +22,19 @@ Expensler is an apps-script google sheets addon for tracking personal finance.
 
 The accounts can be added via the `Expensler` menu button. Currently only Monobank is supported. To enable the API key is required, it can be obtained in the https://api.monobank.ua/ personal cabinet.
 
+![Usage Demo](.meta/expensler_demo.gif)
+
+## Tech Stack
+
+| Component | Technology |
+|---|---|
+| Runtime | [Google Apps Script](https://developers.google.com/apps-script) |
+| Language | TypeScript |
+| UI framework (used for sidebars) | [Solid.js](https://www.solidjs.com/) |
+| Bundler (with couple of custom plugins) | [esbuild](https://esbuild.github.io/) with [esbuild-plugin-solid](https://github.com/solidjs/esbuild-plugin-solid) |
+| Deployment | [clasp](https://github.com/google/clasp) (Google's CLI for Apps Script) |
+| Linting | [ESLint](https://eslint.org/) with [@antfu/eslint-config](https://github.com/antfu/eslint-config) |
+
 ## Development
 
 Clone the repo and install dependencies, authenticate with Google, build and deploy the script:
