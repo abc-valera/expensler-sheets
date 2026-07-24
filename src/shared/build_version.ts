@@ -1,6 +1,6 @@
-// The EXPENSLER_VERSION and EXPENSLER_COMMIT_VERSION constants are defined in src/globals.d.ts
-// and are injected at build time by esbuild.
+// The EXPENSLER_BUILD_VERSION constant is defined in src/globals.d.ts
+// and is injected at build time by esbuild.
 
 export function getBuildVersion(): string {
-	return typeof EXPENSLER_VERSION !== 'undefined' ? EXPENSLER_VERSION : EXPENSLER_COMMIT_VERSION
+	return EXPENSLER_BUILD_VERSION
 }

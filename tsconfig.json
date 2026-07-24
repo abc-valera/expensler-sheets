@@ -17,5 +17,5 @@
 		"strict": true,
 		"types": ["node", "@types/google-apps-script"]
 	},
-	"include": ["src/**/*", "build/**/*"]
+	"include": ["src/**/*", "scripts/build/**/*"]
 }

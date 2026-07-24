@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
-[[ -f ./secrets/prod.env ]] && set -a && source ./secrets/prod.env && set +a
+# Load env
+set -a 
+[[ -f ./secrets/prod.env ]] && source ./secrets/prod.env
+set +a
+source ./scripts/export-build-version.bash && export-build-version
 
 run::login() {
 	npx clasp login
 }
 
 run::build:release() {
-	node --import tsx/esm build/esbuild.config.ts
+	node --import tsx/esm scripts/build/esbuild.config.ts
 }
 
 run::deploy:prod() {
-	EXPENSLER_VERSION=$(git tag --points-at HEAD | head -n1)
-	EXPENSLER_COMMIT_VERSION=$(git rev-parse --short=4 HEAD)
-	EXPENSLER_VERSION="${EXPENSLER_VERSION:-$EXPENSLER_COMMIT_VERSION}"
-	export EXPENSLER_VERSION
 	run::build:release && npx clasp push
 }
 
